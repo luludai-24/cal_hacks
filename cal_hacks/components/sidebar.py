@@ -15,8 +15,8 @@ def sidebar_header() -> rx.Component:
     return rx.hstack(
         # The logo.
         rx.image(
-            src="/icon.svg",
-            height="2em",
+            src="/logo.png",
+            height="6em",
         ),
         rx.spacer(),
         # Link to Reflex GitHub repo.
@@ -34,7 +34,7 @@ def sidebar_header() -> rx.Component:
                     "bg": styles.accent_color,
                 },
             ),
-            href="https://github.com/reflex-dev/reflex",
+            href="https://github.com/luludai-24/cal_hacks/tree/main",
         ),
         width="100%",
         border_bottom=styles.border,
@@ -51,7 +51,7 @@ def sidebar_footer() -> rx.Component:
     return rx.hstack(
         rx.spacer(),
         rx.link(
-            rx.text("HELLO"),
+            rx.text("About"),
             href="https://reflex.dev/docs/getting-started/introduction/",
         ),
         rx.link(

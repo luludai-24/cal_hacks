@@ -2,6 +2,7 @@
 
 from cal_hacks import styles
 from cal_hacks.templates import template
+from cal_hacks.state import State
 
 import reflex as rx
 
@@ -14,27 +15,12 @@ def index() -> rx.Component:
         The UI for the home page.
     """
 
-    data = [
-        {"time": "9am", "level": 154},
-        {"time": "10am", "level": 136.37},
-        {"time": "11am", "level": 274.75},
-        {"time": "12pm", "level": 243.29},
-        {"time": "1pm", "level": 215.44},
-        {"time": "2pm", "level": 190.77},
-        {"time": "3pm", "level": 168.92},
-        {"time": "4pm", "level": 149.58},
-        {"time": "5pm", "level": 132.45},
-        {"time": "6pm", "level": 117.29},
-        {"time": "7pm", "level": 103.86},
-        {"time": "8pm", "level": 91.97},
-        {"time": "9pm", "level": 81.44},
-        {"time": "10pm", "level": 72.11},
-        {"time": "11pm", "level": 63.85},
-    ]
-
     return rx.vstack (
         rx.vstack(
-            rx.heading("Today", font_size="2xl", text_align="left"),
+            rx.hstack(
+                rx.image(src="/bean.png", width="32px", height="32px"),
+                rx.heading("Home"),
+            ),
             rx.text("---------------------------------------------------------------------------------------"),
             rx.text("Caffeine Intake", font_size="lg", text_align="left"),
             width = "100%",
@@ -66,7 +52,7 @@ def index() -> rx.Component:
         align_items="left"
         ),     
 
-        rx.box (
+        rx.box(
             "Caffeine Budget Remaining: 92 mg",
             bg="#004FAC",
             color="white",
@@ -84,11 +70,22 @@ def index() -> rx.Component:
         
         rx.recharts.bar_chart(
             rx.recharts.bar(
-                data_key="level", stroke="#57A4FF", fill="#57A4FF"
+                data_key="caffeine", stroke="#57A4FF", fill="#57A4FF"
             ),
             rx.recharts.x_axis(data_key="time"),
             rx.recharts.y_axis(),
-            data=data,
+            data=State.caffeine_levels,
+        ),
+
+        rx.number_input(
+            on_change=State.set_caffeine,
+            min_ = 0
+        ),
+
+        rx.number_input(
+            on_change = State.set_time,
+            min_ = 0,
+            max_ = 23
         ),
 
         rx.vstack(
@@ -98,17 +95,61 @@ def index() -> rx.Component:
             align_items = "left"
         ),
 
-        rx.flex (
-            rx.vstack (
-                rx.hstack (
-                    rx.image(src="/frappe.png", width="32px", height="32px"),
-                    rx.text("Caffe Latte"),
-                    rx.spacer(),
-                    rx.text("154 mg"),
-                ),
+        rx.vstack (
+            rx.flex (
+                rx.image(src="/frappe.png", width="32px", height="32px"),
+                rx.text("Caffe Latte"),
+                rx.spacer(),
+                rx.text("154 mg"),
                 width = "100%"
-            )
-        ),    
+            ),
+            rx.flex (
+                rx.image(src="/cup.png", width="32px", height="32px"),
+                rx.text("Espresso"),
+                rx.spacer(),
+                rx.text("154 mg"),
+                width = "100%"
+            ),
+            State.update_drinks()
+        ),
+ 
+        rx.button("Add Drink", on_click=State.change),
+        rx.modal(
+            rx.modal_overlay(
+                rx.modal_content(
+                    rx.modal_header("Add Drink"),
+                    rx.vstack(
+                        rx.form(
+                            rx.vstack(
+                                rx.input(
+                                    placeholder="Drink Name",
+                                    id="drink_name",
+                                ),
+                                rx.input(
+                                    placeholder="Caffeine Level", id="caffeine_level"
+                                ),
+                                rx.input(
+                                    placeholder="Time (24 hour format)", id="time"
+                                ),
+                                rx.button("Submit", type_="submit"),
+                            ),
+                            on_submit=State.handle_submit,
+                        ),
+                        rx.divider(),
+                        rx.heading("Results"),
+                        rx.text(State.form_data.to_string()),
+                    ),
+                    rx.modal_footer(
+                        rx.button(
+                            "Close", on_click=State.change
+                        ),
+                    ),
+                )
+            ),
+            is_open=State.show,
+        ),
+        
+        rx.text(State.form_data.to_string()),
 
         width = "100%",
         align_items="left"

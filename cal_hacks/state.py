@@ -4,6 +4,7 @@ import reflex as rx
 import datetime as dt
 import numpy as np
 import pandas as pd
+from typing import List
 
 
 class State(rx.State):
@@ -21,6 +22,9 @@ class State(rx.State):
     time: int = 0
 
     text: str = "Type something..."
+
+    def finish_item(self, item: str):
+            self.items = [i for i in self.items if i != item]
 
     def change(self):
         self.show = not (self.show)
@@ -40,21 +44,21 @@ class State(rx.State):
             columns=State.columns,
         )
     
-    @rx.var
-    def update_drinks(self) -> list:
-        drinks = []
-        for drink in self.form_data:
-            drinks.append(
-                rx.flex (
-                    rx.image(src="/cup.png", width="32px", height="32px"),
-                    rx.text(drink["drink_name"]),
-                    rx.spacer(),
-                    rx.text(drink["caffeine_level"]),
-                    width = "100%"
-                )
-            )
+    # @rx.var
+    # def update_drinks(self) -> list:
+    #     drinks = []
+    #     for drink in self.form_data:
+    #         drinks.append(
+    #             rx.flex (
+    #                 rx.image(src="/cup.png", width="32px", height="32px"),
+    #                 rx.text(drink["drink_name"]),
+    #                 rx.spacer(),
+    #                 rx.text(drink["caffeine_level"]),
+    #                 width = "100%"
+    #             )
+    #         )
 
-        return drinks
+    #     return drinks
     
     @rx.var
     def caffeine_levels(self) -> list:

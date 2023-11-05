@@ -24,7 +24,7 @@ def settings() -> rx.Component:
 
         rx.text("Check the caffeine level of drinks here!"),
 
-        rx.data_table(data=caffeine_data[["drink","Volume (ml)","Calories","Caffeine (mg)","type"]], 
+        rx.data_table(data=caffeine_data[["Drink","Volume (ml)","Calories","Caffeine (mg)","Type"]], 
                       search=True, pagination=True)
 
     )

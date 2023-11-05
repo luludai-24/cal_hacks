@@ -14,6 +14,21 @@ def index() -> rx.Component:
     Returns:
         The UI for the home page.
     """
+    def get_item(item):
+        return rx.list_item(
+            rx.hstack(
+                rx.button(
+                    on_click=lambda: State.finish_item(
+                        item
+                    ),
+                    height="1.5em",
+                    background_color="white",
+                    border="1px solid blue",
+                ),
+                rx.text(item["drink"], font_size="1.25em"),
+            ),
+        )
+    
 
     return rx.vstack (
         rx.vstack(
@@ -21,7 +36,7 @@ def index() -> rx.Component:
                 rx.image(src="/bean.png", width="32px", height="32px"),
                 rx.heading("Home"),
             ),
-            rx.text("---------------------------------------------------------------------------------------"),
+            rx.text("-------------------------------------------------------------------------------------------------"),
             rx.text("Caffeine Intake", font_size="lg", text_align="left"),
             width = "100%",
             align_items = "left"
@@ -39,7 +54,7 @@ def index() -> rx.Component:
                 ),
                 rx.stat(
                     rx.stat_help_text("Day Total"),
-                    rx.stat_number("190/308 mg"),
+                    rx.stat_number("300 mg"),
                 ),
                 align_items="left"
             ),
@@ -53,7 +68,7 @@ def index() -> rx.Component:
         ),     
 
         rx.box(
-            "Caffeine Budget Remaining: 92 mg",
+            "Caffeine Budget Remaining (based on 400 mg daily limit): 100 mg",
             bg="#004FAC",
             color="white",
             border_radius="xl",
@@ -62,7 +77,7 @@ def index() -> rx.Component:
         ),
 
         rx.vstack(
-            rx.text("---------------------------------------------------------------------------------------"),
+            rx.text("-------------------------------------------------------------------------------------------------"),
             rx.text("Caffeine Levels", font_size="lg", text_align="left"),
             width = "100%",
             align_items = "left"
@@ -89,11 +104,27 @@ def index() -> rx.Component:
         ),
 
         rx.vstack(
-            rx.text("---------------------------------------------------------------------------------------"),
+            rx.text("-------------------------------------------------------------------------------------------------"),
             rx.text("Drinks of the Day", font_size="lg", text_align="left"),
             width = "100%",
             align_items = "left"
         ),
+
+        # rx.vstack(
+        #     rx.heading("Todos"),
+
+        #     rx.divider(),
+        #     rx.ordered_list(
+        #         rx.foreach(
+        #             State.form_data,
+        #             get_item,
+        #         ),
+        #     ),
+        #     bg="#ededed",
+        #     padding="1em",
+        #     border_radius="0.5em",
+        #     shadow="lg",
+        # ),
 
         rx.vstack (
             rx.flex (
@@ -110,7 +141,7 @@ def index() -> rx.Component:
                 rx.text("154 mg"),
                 width = "100%"
             ),
-            State.update_drinks()
+            # State.update_drinks()
         ),
  
         rx.button("Add Drink", on_click=State.change),
@@ -135,9 +166,9 @@ def index() -> rx.Component:
                             ),
                             on_submit=State.handle_submit,
                         ),
-                        rx.divider(),
-                        rx.heading("Results"),
-                        rx.text(State.form_data.to_string()),
+                        # rx.divider(),
+                        # rx.heading("Results"),
+                        # rx.text(State.form_data.to_string()),
                     ),
                     rx.modal_footer(
                         rx.button(
@@ -149,7 +180,7 @@ def index() -> rx.Component:
             is_open=State.show,
         ),
         
-        rx.text(State.form_data.to_string()),
+        # rx.text(State.form_data.to_string()),
 
         width = "100%",
         align_items="left"
